@@ -7,8 +7,8 @@
         <script src="https://unpkg.com/htmx.org@2.0.10"></script>
         <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
         <link rel="stylesheet" href="/static/style.css" />
-        <link rel="preconnect" href="https://rsms.me/">
-        <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+        <link rel="preconnect" href="https://rsms.me/" />
+        <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
         {% block head %}{% endblock %}
     </head>
     <body>
@@ -27,26 +27,41 @@
                     hx-get="/search"
                     hx-target=".main"
                     hx-trigger="input changed delay:300ms, search"
-                    hx-push-url="false" />
+                    hx-push-url="false"
+                />
             </div>
         </nav>
 
         <div class="main-wrapper">
             <aside class="sidebar">
+                <a
+                    class="nav-item {% if active_entity == ename %}active{% endif %}"
+                    href="/graph"
+                    hx-get="/graph"
+                    hx-target="body"
+                    hx-push-url="true"
+                    >Graph</a
+                >
+
                 <div class="sidebar-section">
                     <span class="sidebar-section-title">Inventory</span>
-                {% for ename, edef in sidebar_entities.items() %}
-                <a
-                    class="nav-item {% if active_entity == ename %}active{% endif %} "
-                    href="/{{ ename }}"
-                    hx-get="/{{ ename }}"
-                    hx-target="body"
-                    hx-push-url="true">
-                    <i data-lucide="{{ edef.icon }}"></i>
-                    <span class="nav-item-name bg-rb-{{ edef.color_id }}">{{ edef.plural }}</span>
-                    <span class="nav-count" id="count-{{ ename }}">{{ counts.get(ename, 0) }}</span>
-                </a>
-                {% endfor %}
+                    {% for ename, edef in sidebar_entities.items() %}
+                    <a
+                        class="nav-item {% if active_entity == ename %}active{% endif %}"
+                        href="/{{ ename }}"
+                        hx-get="/{{ ename }}"
+                        hx-target="body"
+                        hx-push-url="true"
+                    >
+                        <i data-lucide="{{ edef.icon }}"></i>
+                        <span class="nav-item-name bg-rb-{{ edef.color_id }}"
+                            >{{ edef.plural }}</span
+                        >
+                        <span class="nav-count" id="count-{{ ename }}"
+                            >{{ counts.get(ename, 0) }}</span
+                        >
+                    </a>
+                    {% endfor %}
                 </div>
             </aside>
 
@@ -63,19 +78,25 @@
             </div>
         </div>
 
-
         <div id="toast" class="toast"></div>
         <div id="modal-container"></div>
 
         <script>
             // Re-init Lucide icons after every HTMX swap.
-            document.addEventListener("htmx:afterSwap", () => lucide.createIcons());
-            document.addEventListener("DOMContentLoaded", () => lucide.createIcons());
+            document.addEventListener("htmx:afterSwap", () =>
+                lucide.createIcons()
+            );
+            document.addEventListener("DOMContentLoaded", () =>
+                lucide.createIcons()
+            );
 
             // Keep sidebar active state in sync with HTMX navigation.
             document.addEventListener("htmx:pushedIntoHistory", (e) => {
                 document.querySelectorAll(".nav-item").forEach((el) => {
-                    el.classList.toggle("active", el.getAttribute("href") === location.pathname);
+                    el.classList.toggle(
+                        "active",
+                        el.getAttribute("href") === location.pathname
+                    );
                 });
             });
 
@@ -109,7 +130,10 @@
                         const data = JSON.parse(trigger);
                         if (data.showToast) {
                             // Check if response indicates redirect
-                            if (e.detail.xhr.status === 303 || e.detail.xhr.status === 302) {
+                            if (
+                                e.detail.xhr.status === 303 ||
+                                e.detail.xhr.status === 302
+                            ) {
                                 persistToast(data.showToast);
                             } else {
                                 showToast(data.showToast);

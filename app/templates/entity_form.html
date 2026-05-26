@@ -1,4 +1,5 @@
-{% extends "base.html" %} {% block title %}{{ 'Edit' if edit_mode else 'New' }} {{ entity.label }} — homebase{% endblock %} {% block content %}
+{% extends "base.html" %} {% block title %}{{ 'Edit' if edit_mode else 'New' }}
+{{ entity.label }} — homebase{% endblock %} {% block content %}
 <div class="page-header">
     <h1>{{ 'Edit' if edit_mode else 'New' }} {{ entity.label }}</h1>
     <a
@@ -6,74 +7,177 @@
         href="/{{ entity.name }}{% if edit_mode %}/{{ item.id }}{% endif %}"
         hx-get="/{{ entity.name }}{% if edit_mode %}/{{ item.id }}{% endif %}"
         hx-target="body"
-        hx-push-url="true">
+        hx-push-url="true"
+    >
         <i data-lucide="arrow-left"></i> Cancel
     </a>
 </div>
 
-<div id="form-errors" style="color: var(--red); font-size: 12px; margin-bottom: 12px; display: none"></div>
+<div
+    id="form-errors"
+    style="
+        color: var(--red);
+        font-size: 12px;
+        margin-bottom: 12px;
+        display: none;
+    "
+></div>
 
 <div class="form-grid">
-    {% for fname, fdef in entity.fields.items() %} {% set val = item.get(fname, '') if item else '' %} {% set is_wide = fdef.type.value in
-    ('markdown', 'tags', 'json') %}
+    {% for fname, fdef in entity.fields.items() %} {% set val = item.get(fname,
+    '') if item else '' %} {% set is_wide = fdef.type.value in ('markdown',
+    'tags', 'json') %}
 
     <div class="form-group {% if is_wide %}full{% endif %}">
-        <label for="field-{{ fname }}"> {{ fname | replace('_', ' ') }} {% if fdef.required %}<span class="req">*</span>{% endif %} </label>
+        <label for="field-{{ fname }}">
+            {{ fname | replace('_', ' ') }} {% if fdef.required %}<span
+                class="req"
+                >*</span
+            >{% endif %}
+        </label>
 
         {% if fdef.type.value == 'enum' %}
         <select id="field-{{ fname }}" name="{{ fname }}">
             <option value="">— select —</option>
             {% for opt in fdef.options %}
-            <option value="{{ opt }}" {% if val==opt %}selected{% endif %}>{{ opt }}</option>
+            <option value="{{ opt }}" {% if val="" ="opt" %}selected{% endif %}>
+                {{ opt }}
+            </option>
             {% endfor %}
         </select>
 
         {% elif fdef.type.value == 'boolean' %}
         <select id="field-{{ fname }}" name="{{ fname }}">
             <option value="">— select —</option>
-            <option value="true" {% if val== true %}selected{% endif %}>Yes</option>
-            <option value="false" {% if val== false %}selected{% endif %}>No</option>
+            <option value="true" {% if val="" ="true" %}selected{% endif %}>
+                Yes
+            </option>
+            <option value="false" {% if val="" ="false" %}selected{% endif %}>
+                No
+            </option>
         </select>
 
         {% elif fdef.type.value == 'markdown' %}
-        <textarea id="field-{{ fname }}" name="{{ fname }}" rows="4">{{ val or '' }}</textarea>
+        <textarea id="field-{{ fname }}" name="{{ fname }}" rows="4">
+{{ val or '' }}</textarea
+        >
 
         {% elif fdef.type.value == 'tags' %}
-        <input id="field-{{ fname }}" name="{{ fname }}" type="text" value="{{ val | join(', ') if val else '' }}" placeholder="tag1, tag2, tag3" />
+        <input
+            id="field-{{ fname }}"
+            name="{{ fname }}"
+            type="text"
+            value="{{ val | join(', ') if val else '' }}"
+            placeholder="tag1, tag2, tag3"
+        />
 
         {% elif fdef.type.value == 'number' %}
-        <input id="field-{{ fname }}" name="{{ fname }}" type="number" step="any" value="{{ val if val is not none else '' }}" />
+        <input
+            id="field-{{ fname }}"
+            name="{{ fname }}"
+            type="number"
+            step="any"
+            value="{{ val if val is not none else '' }}"
+        />
 
         {% elif fdef.type.value == 'date' %}
-        <input id="field-{{ fname }}" name="{{ fname }}" type="date" value="{{ val or '' }}" />
+        <input
+            id="field-{{ fname }}"
+            name="{{ fname }}"
+            type="date"
+            value="{{ val or '' }}"
+        />
 
         {% elif fdef.type.value == 'datetime' %}
-        <input id="field-{{ fname }}" name="{{ fname }}" type="datetime-local" value="{{ val or '' }}" />
+        <input
+            id="field-{{ fname }}"
+            name="{{ fname }}"
+            type="datetime-local"
+            value="{{ val or '' }}"
+        />
 
         {% elif fdef.type.value == 'url' %}
-        <input id="field-{{ fname }}" name="{{ fname }}" type="url" value="{{ val or '' }}" placeholder="https://…" />
+        <input
+            id="field-{{ fname }}"
+            name="{{ fname }}"
+            type="url"
+            value="{{ val or '' }}"
+            placeholder="https://…"
+        />
 
         {% elif fdef.type.value == 'email' %}
-        <input id="field-{{ fname }}" name="{{ fname }}" type="email" value="{{ val or '' }}" placeholder="user@example.com" />
+        <input
+            id="field-{{ fname }}"
+            name="{{ fname }}"
+            type="email"
+            value="{{ val or '' }}"
+            placeholder="user@example.com"
+        />
 
-        {% elif fdef.type.value == 'relation' %} {% set targets = relation_options.get(fdef.target, []) %} {% if fdef.many %}
-        <select id="field-{{ fname }}" name="{{ fname }}" multiple style="min-height: 80px">
+        {% elif fdef.type.value == 'relation' %} {% set targets =
+        relation_options.get(fdef.target, []) %} {% if fdef.many %}
+        <select
+            id="field-{{ fname }}"
+            name="{{ fname }}"
+            multiple
+            style="min-height: 80px"
+        >
             {% for opt in targets %}
-            <option value="{{ opt.id }}" {% if val and opt.id in val %}selected{% endif %}>{{ opt.display }}</option>
+            <option
+                value="{{ opt.id }}"
+                {%
+                if
+                val
+                and
+                opt.id
+                in
+                val
+                %}selected{%
+                endif
+                %}
+            >
+                {{ opt.display }}
+            </option>
             {% endfor %}
         </select>
         {% else %}
         <select id="field-{{ fname }}" name="{{ fname }}">
             <option value="">— none —</option>
             {% for opt in targets %}
-            <option value="{{ opt.id }}" {% if val and val|int == opt.id %}selected="selected"{% endif %}>{{ opt.display }}</option>
+            <option
+                value="{{ opt.id }}"
+                {%
+                if
+                val
+                and
+                val|int=""
+                ="opt.id"
+                %}selected="selected"
+                {%
+                endif
+                %}
+            >
+                {{ opt.display }}
+            </option>
             {% endfor %}
         </select>
         {% endif %} {% elif fdef.type.value == 'json' %}
-        <textarea id="field-{{ fname }}" name="{{ fname }}" rows="4" placeholder='{"key": "value"}'>{{ val | tojson if val else '' }}</textarea>
+        <textarea
+            id="field-{{ fname }}"
+            name="{{ fname }}"
+            rows="4"
+            placeholder='{"key": "value"}'
+        >
+{{ val | tojson if val else '' }}</textarea
+        >
 
         {% else %}
-        <input id="field-{{ fname }}" name="{{ fname }}" type="text" value="{{ val or '' }}" />
+        <input
+            id="field-{{ fname }}"
+            name="{{ fname }}"
+            type="text"
+            value="{{ val or '' }}"
+        />
         {% endif %}
     </div>
     {% endfor %}

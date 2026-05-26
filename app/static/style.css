@@ -25,7 +25,7 @@
     --gray-a11: #0002119d;
     --gray-a12: #000107e1;
 
-    --gray-contrast: #FFFFFF;
+    --gray-contrast: #ffffff;
     --gray-surface: #ffffffcc;
     --gray-indicator: #8b8d98;
     --gray-track: #8b8d98;
@@ -38,15 +38,17 @@
     --text: var(--gray-12);
     --text-dim: var(--gray-11);
     --text-bright: var(--gray-12);
-    --accent: #3D63DD;
-    --accent-dim: #3D63DD;
+    --accent: #3d63dd;
+    --accent-dim: #3d63dd;
     --green: #3dd68c;
     --yellow: #f5c542;
     --red: #ef5350;
     --radius: 6px;
     --font: Inter, sans-serif;
     font-family: Inter, sans-serif;
-    font-feature-settings: 'liga' 1, 'calt' 1;
+    font-feature-settings:
+        "liga" 1,
+        "calt" 1;
     /* fix for Chrome */
 
     /* She's like a rainbow... */
@@ -55,20 +57,17 @@
     --rainbow-3: #d97706;
     --rainbow-4: #65a30d;
     --rainbow-5: #16a34a;
-    --rainbow-6: #007A5E;
+    --rainbow-6: #007a5e;
     --rainbow-7: #0d9488;
     --rainbow-8: #2563eb;
     --rainbow-9: #4f46e5;
     --rainbow-10: #7c3aed;
     --rainbow-11: #c026d3;
     --rainbow-12: #e11d48;
-
 }
-
 
 @supports (color: color(display-p3 1 1 1)) {
     @media (color-gamut: p3) {
-
         :root,
         .light,
         .light-theme {
@@ -98,7 +97,7 @@
             --gray-a11: color(display-p3 0 0.0078 0.0588 / 0.616);
             --gray-a12: color(display-p3 0 0.0039 0.0275 / 0.883);
 
-            --gray-contrast: #FFFFFF;
+            --gray-contrast: #ffffff;
             --gray-surface: color(display-p3 1 1 1 / 80%);
             --gray-indicator: oklch(64.6% 0.0165 277.7);
             --gray-track: oklch(64.6% 0.0165 277.7);
@@ -218,12 +217,10 @@ body {
     background: var(--bg-hover);
 }
 
-
 .nav-item.active {
     font-weight: 600;
     background: var(--gray-3);
 }
-
 
 .nav-item-name,
 .entity-badge {
@@ -258,7 +255,8 @@ body {
     min-width: 0;
 }
 
-.page-header {
+.page-header,
+.page-filter {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -390,7 +388,6 @@ td a:hover {
     background: var(--gray-5);
     color: var(--text-dim);
 }
-
 
 .tag {
     display: inline-block;
